@@ -1,0 +1,33 @@
+#=========================== Filebeat setup =============================
+name: ${FILEBEAT_APP_NAME:app}
+setup.template:
+  name: "${FILEBEAT_APP_NAME:app}"
+  pattern: "${FILEBEAT_APP_NAME:app}-*"
+
+setup.dashboards.index: "${FILEBEAT_APP_NAME:app}-*"
+setup.dashboards.enabled: false
+
+setup.ilm.enabled: false
+
+#=========================== Filebeat inputs =============================
+filebeat.inputs:
+- type: log
+  encoding: utf-8
+  paths:
+    - /home/app/log/logstash_*.log
+  json.keys_under_root: true
+  json.add_error_key: true
+
+#=========================== Filebeat processors =============================
+processors:
+  - rename:
+      fields:
+        - from: "source"
+          to: "origin"
+      ignore_missing: true
+      fail_on_error: false
+
+#================================ Outputs =====================================
+output.elasticsearch:
+  hosts: ["${FILEBEAT_ELASTICSEARCH_HOSTS:http://localhost:9200}"]
+  index: "${FILEBEAT_APP_NAME:app}-%{+yyyy.MM}"

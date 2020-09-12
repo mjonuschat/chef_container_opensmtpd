@@ -1,0 +1,14 @@
+#!/bin/sh
+# TODO: Bail out if certificate exists - rely on cron to renew
+
+/usr/bin/certbot certonly \
+    --agree-tos \
+    -n \
+    -m "<%= node['container_opensmtpd']['certbot']['email'] -%>" \
+    --dns-route53 \
+    --dns-route53-propagation-seconds 30 \
+    -d "<%= node['container_opensmtpd']['opensmtpd']['mailname'] -%>" \
+    --test-cert \
+    #
+
+exit 0

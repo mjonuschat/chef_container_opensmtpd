@@ -1,0 +1,10 @@
+allow_username_mismatch = true;
+
+<% node['container_opensmtpd']['opensmtpd']['vdomains'].each do |domain| %>
+domain {
+    <%= domain %> {
+        path = "/etc/mail/dkim/<%= domain %>.key";
+        selector = "default";
+    }
+}
+<% end -%>

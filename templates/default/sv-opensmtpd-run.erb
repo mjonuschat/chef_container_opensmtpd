@@ -1,0 +1,5 @@
+#!/bin/sh
+set -e
+. /etc/container_environment.sh
+exec 2>&1
+exec /usr/sbin/smtpd -d -f /etc/smtpd.conf

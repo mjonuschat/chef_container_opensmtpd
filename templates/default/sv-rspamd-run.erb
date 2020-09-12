@@ -1,0 +1,7 @@
+#!/bin/sh
+set -e
+. /etc/container_environment.sh
+mkdir -m 755 -p /run/rspamd
+chown _rspamd:_rspamd /run/rspamd
+exec 2>&1
+exec /usr/bin/rspamd -f -c /etc/rspamd/rspamd.conf -u _rspamd -g _rspamd

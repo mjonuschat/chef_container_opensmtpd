@@ -1,0 +1,23 @@
+# This is the smtpd server system-wide configuration file.
+# See smtpd.conf(5) for more information.
+
+filter check_dyndns phase connect match rdns regex { '.*\.dyn\..*', '.*\.dsl\..*' } disconnect "550 no residential connections"
+filter check_rdns phase connect match !rdns disconnect "550 Reverse DNS setup required"
+filter check_fcrdns phase connect match !fcrdns disconnect "550 Forward correct reverse DNS is required"
+
+filter senderscore proc-exec "filter-senderscore -blockBelow 10 -junkBelow 70 -slowFactor 5000"
+
+filter rspamd proc-exec "filter-rspamd"
+
+listen on <%= node['container_opensmtpd']['opensmtpd']['listen'] %> filter { check_dyndns, check_rdns, check_fcrdns, senderscore, rspamd } 
+
+table aliases file:/etc/mail/aliases
+table vdomains file:/etc/mail/vdomains
+table vusers file:/etc/mail/vusers
+
+srs key <%= node['container_opensmtpd']['opensmtpd']['srs_key'] %>
+action "outbound" relay srs
+action "local" forward-only virtual <vusers>
+
+match from any for domain <vdomains> action "local"
+match from local for any action "outbound"
