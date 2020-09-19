@@ -8,10 +8,13 @@ fi
     --agree-tos \
     -n \
     -m "<%= node['container_opensmtpd']['certbot']['email'] -%>" \
+    --expand \
     --dns-route53 \
     --dns-route53-propagation-seconds 30 \
     -d "<%= node['container_opensmtpd']['opensmtpd']['mailname'] -%>" \
-    --test-cert \
+    <% node['container_opensmtpd']['opensmtpd']['vdomains'].each do |name|-%>
+    -d "<%= name %>" \
+    <% end -%>
     #
 
 exit 0
