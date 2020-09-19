@@ -1,5 +1,8 @@
-#!/bin/sh
-# TODO: Bail out if certificate exists - rely on cron to renew
+#!/bin/bash
+# Bail out if we have the main certificate
+if [[ -e /etc/letsencrypt/archive/<%= node['container_opensmtpd']['opensmtpd']['mailname'] -%>/cert1.pem && -r /etc/letsencrypt/archive/<%= node['container_opensmtpd']['opensmtpd']['mailname'] -%>/cert1.pem ]]; then
+  exit 0
+fi
 
 /usr/bin/certbot certonly \
     --agree-tos \

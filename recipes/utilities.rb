@@ -47,3 +47,10 @@ template '/etc/my_init.d/certbot' do
   mode '0750'
   source 'certbot/startup.erb'
 end
+
+template '/etc/cron.d/certbot' do
+  owner 'root'
+  group 'root'
+  mode '0750'
+  source 'certbot/certbot.cron.erb'
+end

@@ -1,0 +1,1 @@
+37 3 * * * root test -e /usr/bin/certbot && /usr/bin/certbot renew --post-hook "/usr/bin/sv restart opensmtpd"
