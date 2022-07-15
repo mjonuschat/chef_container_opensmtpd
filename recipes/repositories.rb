@@ -27,31 +27,6 @@ apt_repository 'filebeat' do
   components %w[main]
 end
 
-## Groovy backports
-apt_repository 'groovy-universe' do
-  uri 'http://us.archive.ubuntu.com/ubuntu'
-  distribution 'groovy'
-  components %w[universe]
-end
-
-apt_preference 'groovy-universe' do
-  package_name '*'
-  pin 'release n=groovy'
-  pin_priority '-10'
-end
-
-apt_preference 'groovy-universe-opensmtpd-filter-rspamd' do
-  package_name 'opensmtpd-filter-rspamd'
-  pin 'release n=groovy'
-  pin_priority '900'
-end
-
-apt_preference 'groovy-universe-opensmtpd-filter-senderscore' do
-  package_name 'opensmtpd-filter-senderscore'
-  pin 'release n=groovy'
-  pin_priority '900'
-end
-
 ## Update apt repository information
 apt_update 'refresh' do
   action :update
